@@ -35,8 +35,8 @@ defineProps({
 
 <style lang="scss">
 .modal {
-  min-height: 30vh;
-  min-width: 20vw;
+  min-height: 20rem;
+  min-width: 20rem;
 
   &__title {
     align-self: center;
