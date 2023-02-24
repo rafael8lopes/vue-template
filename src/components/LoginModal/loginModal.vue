@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import Modal from "../shared/Modal/index.vue";
+import Modal from "../shared/Modal/modal.vue";
 
 export default defineComponent({
   name: "LoginModal",

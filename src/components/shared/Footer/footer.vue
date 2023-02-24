@@ -1,6 +1,6 @@
 <template>
   <v-footer>
-    {{ new Date().getFullYear() }} — <strong>Rafael Lopes</strong>
+    {{ new Date().getFullYear() }} — &nbsp;<strong>Rafael Lopes</strong>
   </v-footer>
 </template>
 

@@ -1,11 +1,9 @@
 <template>
   <div>
     <v-toolbar prominent :elevation="8">
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
       <v-toolbar-title @click="handleHome" id="app-name">
         Vue template
       </v-toolbar-title>
-      <v-spacer></v-spacer>
 
       <v-btn v-if="userName === ''" @click="onOpenLogin">
         Entrar &nbsp;
@@ -19,7 +17,7 @@
 
         <v-list>
           <v-list-item
-            v-for="(item, index) in links"
+            v-for="(item, index) in accountLinks"
             :key="index"
             @click="item.action"
           >
@@ -42,7 +40,7 @@
 <script lang="ts">
 import router from "@/router";
 import { defineComponent, ref } from "vue";
-import LoginModal from "../../LoginModal/index.vue";
+import LoginModal from "../../LoginModal/loginModal.vue";
 
 export default defineComponent({
   name: "AppHeader",
@@ -50,7 +48,7 @@ export default defineComponent({
     LoginModal,
   },
   setup() {
-    let userName = ref("");
+    let userName = ref("RAFAEL");
     let isLoginModalOpen = ref(false);
 
     const onOpenLogin = () => {
@@ -76,14 +74,14 @@ export default defineComponent({
       router.push("profile");
     };
 
-    const links = [
+    const accountLinks = [
       { title: "Perfil", action: handleProfile },
       { title: "Encerrar", action: handleLogout },
     ];
 
     return {
       userName,
-      links,
+      accountLinks,
       onOpenLogin,
       onCloseLogin,
       handleHome,

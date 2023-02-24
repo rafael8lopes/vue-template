@@ -7,6 +7,7 @@ export type ApiError<E = {}> = E & {
   detail: string;
   status: number;
 };
+
 export type Failable<T, E> =
   | { success: true; data: T }
   | { success: false; error: E };
