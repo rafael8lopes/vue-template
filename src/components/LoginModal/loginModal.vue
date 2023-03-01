@@ -1,27 +1,26 @@
 <template>
   <modal title="Autenticação" @close-modal="closeModal">
-    <v-form v-model="valid">
+    <v-form ref="form" @submit.prevent="onSubmit">
       <v-container>
         <v-row>
           <v-text-field
-            v-model="userName"
-            :rules="rules"
+            v-model="email"
             label="Nome de utilizador"
+            :rules="fieldRules"
             required
           />
         </v-row>
         <v-row>
           <v-text-field
             v-model="password"
-            :rules="rules"
             label="Palavra passe"
-            required
+            :rules="fieldRules"
           />
         </v-row>
       </v-container>
-    </v-form>
 
-    <v-btn @click="handleLogin" type="submit" class="mt-2"> Entrar </v-btn>
+      <v-btn type="submit" class="mt-2">Entrar</v-btn>
+    </v-form>
 
     <v-snackbar
       v-model="hasErrorMessage"
@@ -48,38 +47,40 @@ export default defineComponent({
 
 <script lang="ts" setup>
 import { loginUser } from "@/api/users";
+import { useUser } from "@/composables/user";
 
 const emit = defineEmits(["close-modal"]);
 const closeModal = () => emit("close-modal");
-
-const handleLogin = () => {
-  if (userName && password) {
-    loginUser().then((resp) => {
-      if (resp.success) {
-        closeModal();
-        // TODO composable updating user
-      } else {
-        hasErrorMessage.value = true;
-        errorMessage.value = "Error message";
-      }
-    });
-  }
-};
-
-const valid = ref(false);
-const userName = ref("");
-const password = ref("");
+const { updateUserName } = useUser();
 
 const hasErrorMessage = ref(false);
 const errorMessage = ref("");
 
-const rules = [
-  (value: string) => {
-    if (value) return true;
+const form = ref();
+const email = ref("");
+const password = ref("");
 
-    return "Campo obrigatorio";
-  },
-];
+const fieldRules = [(v: string) => !!v || "Campo obrigatório"];
+
+const onSubmit = async () => {
+  const { valid } = await form.value.validate();
+
+  if (valid) {
+    loginUser().then((resp) => {
+      if (resp.success) {
+        updateUserName(email.value);
+        closeModal();
+      } else {
+        // because this is mock we need mock a successful login
+        updateUserName(email.value); // delete this (mock)
+        closeModal(); // delete this (mock)
+
+        // hasErrorMessage.value = true;
+        // errorMessage.value = resp.error.title;
+      }
+    });
+  }
+};
 </script>
 
 <style lang="scss"></style>

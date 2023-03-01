@@ -1,7 +1,7 @@
 <template class="about">
   <page title="About">
     <p>
-      Hi, I'm Rafael Lopes I live in Portugal and i'm a Frontend developer
+      Hi, I'm Rafael Lopes I live in Portugal and i'm a frontend developer
       currently working at Mercedes Benz.
     </p>
     <p>

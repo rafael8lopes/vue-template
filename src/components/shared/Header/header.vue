@@ -5,14 +5,14 @@
         Vue template
       </v-toolbar-title>
 
-      <v-btn v-if="userName === ''" @click="onOpenLogin">
+      <v-btn v-if="!isUserAuthenticated()" @click="onOpenLogin">
         Entrar &nbsp;
         <v-icon>mdi-export</v-icon>
       </v-btn>
 
-      <v-menu v-if="userName !== ''" open-on-hover>
+      <v-menu v-if="isUserAuthenticated()" open-on-hover>
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props"> {{ userName }} </v-btn>
+          <v-btn v-bind="props"> {{ user.name }} </v-btn>
         </template>
 
         <v-list>
@@ -39,7 +39,8 @@
 
 <script lang="ts">
 import router from "@/router";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
+import { useUser } from "../../../composables/user";
 import LoginModal from "../../LoginModal/loginModal.vue";
 
 export default defineComponent({
@@ -48,22 +49,16 @@ export default defineComponent({
     LoginModal,
   },
   setup() {
-    let userName = ref("RAFAEL");
+    const { user, isUserAuthenticated, logoutUser } = useUser();
+
     let isLoginModalOpen = ref(false);
 
     const onOpenLogin = () => {
       isLoginModalOpen.value = true;
-      console.log("isLoginModalOpen", isLoginModalOpen.value);
-      // userName.value = "Rafael Lopes";
     };
 
     const onCloseLogin = () => {
       isLoginModalOpen.value = false;
-      // userName.value = "Rafael Lopes";
-    };
-
-    const handleLogout = () => {
-      userName.value = "";
     };
 
     const handleHome = () => {
@@ -76,11 +71,12 @@ export default defineComponent({
 
     const accountLinks = [
       { title: "Perfil", action: handleProfile },
-      { title: "Encerrar", action: handleLogout },
+      { title: "Encerrar", action: logoutUser },
     ];
 
     return {
-      userName,
+      user,
+      isUserAuthenticated,
       accountLinks,
       onOpenLogin,
       onCloseLogin,
